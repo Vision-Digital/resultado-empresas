@@ -1,0 +1,1327 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="dashboard-container">
+    <!-- Navegação das Seções -->
+    <div class="section-nav mb-4">
+        <div class="container">
+            <ul class="nav nav-pills nav-justified" id="dashboardTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="add-tab" data-bs-toggle="tab" data-bs-target="#add" type="button">
+                        <i class="fas fa-plus-circle me-2"></i>Adicionar Dados
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="edit-tab" data-bs-toggle="tab" data-bs-target="#edit" type="button">
+                        <i class="fas fa-edit me-2"></i>Editar Dados
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="graphs-tab" data-bs-toggle="tab" data-bs-target="#graphs" type="button">
+                        <i class="fas fa-chart-line me-2"></i>Resultados Gráficos
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="diagnosis-tab" data-bs-toggle="tab" data-bs-target="#diagnosis" type="button">
+                        <i class="fas fa-microscope me-2"></i>Diagnóstico Detalhado
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Conteúdo das Seções -->
+    <div class="tab-content" id="dashboardTabContent">
+        <!-- Seção 1: Adicionar Dados -->
+        <div class="tab-pane fade show active" id="add">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 mx-auto">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title mb-4">Adicionar Dados Financeiros</h4>
+                                <form id="addFinancialDataForm">
+                                    <div class="row g-3">
+                                        <div class="col-md-4">
+                                            <label class="form-label">Mês de Referência</label>
+                                            <input type="text" class="form-control" name="reference_date" placeholder="MM/AAAA" required
+                                                   pattern="^(0[1-9]|1[0-2])/20[0-9]{2}$" title="Formato: MM/AAAA">
+                                        </div>
+                                        
+                                        <div class="col-md-4">
+                                            <label class="form-label">Saldo em Caixa</label>
+                                            <input type="text" class="form-control money" name="cash_balance" required>
+                                        </div>
+                                        
+                                        <div class="col-md-4">
+                                            <label class="form-label">Saldo em Banco</label>
+                                            <input type="text" class="form-control money" name="bank_balance" required>
+                                        </div>
+                                        
+                                        <div class="col-md-4">
+                                            <label class="form-label">Total de Contas a Receber</label>
+                                            <input type="text" class="form-control money" name="accounts_receivable" required>
+                                        </div>
+                                        
+                                        <div class="col-md-4">
+                                            <label class="form-label">Saldo em Estoque</label>
+                                            <input type="text" class="form-control money" name="inventory_balance" required>
+                                        </div>
+                                        
+                                        <div class="col-md-4">
+                                            <label class="form-label">Total de Outros Créditos</label>
+                                            <input type="text" class="form-control money" name="other_credits" required>
+                                        </div>
+                                        
+                                        <div class="col-md-4">
+                                            <label class="form-label">Total de Bens Imobilizados</label>
+                                            <input type="text" class="form-control money" name="fixed_assets" required>
+                                        </div>
+                                        
+                                        <div class="col-md-4">
+                                            <label class="form-label">Total de Investimentos</label>
+                                            <input type="text" class="form-control money" name="investments" required>
+                                            <small class="text-muted">Aplicações, consórcios, etc</small>
+                                        </div>
+                                        
+                                        <div class="col-md-4">
+                                            <label class="form-label">Total de Contas a Pagar</label>
+                                            <input type="text" class="form-control money" name="accounts_payable" required>
+                                        </div>
+                                        
+                                        <div class="col-md-4">
+                                            <label class="form-label">Total de Empréstimos</label>
+                                            <input type="text" class="form-control money" name="loans_financing" required>
+                                            <small class="text-muted">Empréstimos e Financiamentos</small>
+                                        </div>
+                                        
+                                        <div class="col-md-4">
+                                            <label class="form-label">Saldo de Parcelamentos</label>
+                                            <input type="text" class="form-control money" name="installments_payable" required>
+                                            <small class="text-muted">Saldo devedor de parcelamentos</small>
+                                        </div>
+                                        
+                                        <div class="col-md-4">
+                                            <label class="form-label">Total de Vendas</label>
+                                            <input type="text" class="form-control money" name="total_sales" required>
+                                        </div>
+                                        
+                                        <div class="col-12 mt-4">
+                                            <button type="submit" class="btn btn-primary w-100">
+                                                <i class="fas fa-save me-2"></i>Salvar Dados Financeiros
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção 2: Editar Dados -->
+        <div class="tab-pane fade" id="edit">
+            <div class="container">
+                <div class="row">
+                    <!-- Lista de Meses -->
+                    <div class="col-lg-3">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <h5 class="card-title">Meses Disponíveis</h5>
+                                <div class="list-group" id="monthsList">
+                                    <!-- Lista será preenchida via JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Formulário de Edição -->
+                    <div class="col-lg-9">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 class="card-title mb-4">Editar Dados Financeiros</h4>
+                                <form id="editFinancialDataForm">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label">Mês de Referência</label>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" name="reference_date" placeholder="MM/AAAA" required
+                                                       pattern="^(0[1-9]|1[0-2])/20[0-9]{2}$" title="Formato: MM/AAAA">
+                                                <button class="btn btn-primary" type="button" id="searchDataBtn">
+                                                    <i class="fas fa-search"></i> Buscar
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label class="form-label">Saldo em Caixa</label>
+                                            <input type="text" class="form-control money" name="cash_balance" required>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label class="form-label">Saldo em Banco</label>
+                                            <input type="text" class="form-control money" name="bank_balance" required>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label class="form-label">Total de Contas a Receber</label>
+                                            <input type="text" class="form-control money" name="accounts_receivable" required>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label class="form-label">Saldo em Estoque</label>
+                                            <input type="text" class="form-control money" name="inventory_balance" required>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label class="form-label">Total de Outros Créditos</label>
+                                            <input type="text" class="form-control money" name="other_credits" required>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label class="form-label">Total de Bens Imobilizados</label>
+                                            <input type="text" class="form-control money" name="fixed_assets" required>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label class="form-label">Total de Investimentos</label>
+                                            <input type="text" class="form-control money" name="investments" required>
+                                            <small class="text-muted">Aplicações, consórcios, etc</small>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label class="form-label">Total de Contas a Pagar</label>
+                                            <input type="text" class="form-control money" name="accounts_payable" required>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label class="form-label">Total de Empréstimos</label>
+                                            <input type="text" class="form-control money" name="loans_financing" required>
+                                            <small class="text-muted">Empréstimos e Financiamentos</small>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label class="form-label">Saldo de Parcelamentos</label>
+                                            <input type="text" class="form-control money" name="installments_payable" required>
+                                            <small class="text-muted">Saldo devedor de parcelamentos</small>
+                                        </div>
+                                        
+                                        <div class="col-md-6">
+                                            <label class="form-label">Total de Vendas</label>
+                                            <input type="text" class="form-control money" name="total_sales" required>
+                                        </div>
+                                        
+                                        <div class="col-12 mt-4">
+                                            <div class="d-flex gap-2">
+                                                <button type="submit" class="btn btn-primary flex-grow-1" id="saveDataBtn">
+                                                    <i class="fas fa-save me-2"></i>Salvar Alterações
+                                                </button>
+                                                <button type="button" class="btn btn-danger" id="deleteDataBtn">
+                                                    <i class="fas fa-trash me-2"></i>Excluir Dados
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção 3: Resultados Gráficos -->
+        <div class="tab-pane fade" id="graphs">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Resultados Financeiros</h5>
+                            </div>
+                            <div class="card-body">
+                                <!-- Tabela de Resultados -->
+                                <div class="table-responsive mb-4">
+                                    <table class="table table-striped" id="resultsTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Mês</th>
+                                                <th>Patrimônio Líquido</th>
+                                                <th>Variação Mês Anterior</th>
+                                                <th>Resultado sobre Faturamento</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- Dados serão inseridos via JavaScript -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                
+                                <!-- Gráfico de Resultados -->
+                                <div>
+                                    <canvas id="resultsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção 4: Diagnóstico Detalhado -->
+        <div class="tab-pane fade" id="diagnosis">
+            <div class="container">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Análise de Desempenho</h5>
+                                <div class="performance-metrics">
+                                    <div class="metric-item">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span>Margem de Lucro</span>
+                                            <span class="badge bg-success">35%</span>
+                                        </div>
+                                        <div class="progress mb-3">
+                                            <div class="progress-bar bg-success" style="width: 35%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="metric-item">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span>Crescimento de Receita</span>
+                                            <span class="badge bg-primary">28%</span>
+                                        </div>
+                                        <div class="progress mb-3">
+                                            <div class="progress-bar bg-primary" style="width: 28%"></div>
+                                        </div>
+                                    </div>
+                                    <div class="metric-item">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span>Redução de Custos</span>
+                                            <span class="badge bg-info">15%</span>
+                                        </div>
+                                        <div class="progress mb-3">
+                                            <div class="progress-bar bg-info" style="width: 15%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Recomendações</h5>
+                                <div class="recommendations">
+                                    <div class="recommendation-item">
+                                        <i class="fas fa-lightbulb text-warning"></i>
+                                        <div class="ms-3">
+                                            <h6>Otimização de Custos</h6>
+                                            <p class="text-muted mb-0">Identifique áreas com potencial para redução de custos operacionais.</p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="recommendation-item">
+                                        <i class="fas fa-chart-line text-success"></i>
+                                        <div class="ms-3">
+                                            <h6>Crescimento de Receita</h6>
+                                            <p class="text-muted mb-0">Explore novas oportunidades de mercado e diversificação de produtos.</p>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="recommendation-item">
+                                        <i class="fas fa-balance-scale text-primary"></i>
+                                        <div class="ms-3">
+                                            <h6>Gestão de Fluxo de Caixa</h6>
+                                            <p class="text-muted mb-0">Mantenha um controle rigoroso das entradas e saídas para otimizar o capital de giro.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Análise de Tendências</h5>
+                                <div class="trends-analysis">
+                                    <canvas id="trendsChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.dashboard-container {
+    padding: 1rem 0;
+}
+
+.section-nav {
+    background-color: var(--card-background);
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.nav-pills .nav-link {
+    color: var(--text-secondary) !important;
+    background-color: transparent;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    margin: 0 0.25rem;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.nav-pills .nav-link:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+    background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+    color: white !important;
+}
+
+.nav-pills .nav-link.active {
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    transform: translateY(-2px);
+}
+
+.nav-pills .nav-link.active:hover {
+    background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+}
+
+.nav-pills .nav-link i {
+    transition: transform 0.3s ease;
+}
+
+.nav-pills .nav-link:hover i,
+.nav-pills .nav-link.active i {
+    transform: scale(1.1);
+}
+
+.card {
+    background-color: var(--card-background);
+    border: none;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    margin-bottom: 1.5rem;
+}
+
+.card-title {
+    color: var(--text-color);
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+}
+
+.metric-card {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+    color: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+}
+
+.metric-card h3 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.metric-card p {
+    margin-bottom: 0;
+    opacity: 0.9;
+}
+
+.table {
+    color: var(--text-color);
+}
+
+.table thead th {
+    background-color: var(--background-color);
+    color: var(--text-secondary);
+    font-weight: 600;
+    border-bottom: 2px solid rgba(0,0,0,0.1);
+}
+
+.progress {
+    background-color: var(--hover-color);
+}
+
+.progress-bar {
+    background-color: var(--primary-color);
+}
+
+.recommendation-item {
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: var(--hover-color);
+    margin-bottom: 1rem;
+}
+
+.recommendation-item i {
+    color: var(--primary-color);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    border: none;
+    color: white;
+    box-shadow: 0 2px 4px rgba(44, 62, 80, 0.15);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+    background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Referências aos elementos do DOM
+    const editForm = document.getElementById('editFinancialDataForm');
+    const editDateInput = editForm ? editForm.querySelector('[name="reference_date"]') : null;
+    const searchDataBtn = document.getElementById('searchDataBtn');
+    const deleteDataBtn = document.getElementById('deleteDataBtn');
+    const saveDataBtn = document.getElementById('saveDataBtn');
+    const monthsList = document.getElementById('monthsList');
+
+    // Inicializar máscara para campos de moeda
+    const moneyInputs = document.querySelectorAll('.money');
+    moneyInputs.forEach(input => {
+        IMask(input, {
+            mask: 'R$ num',
+            blocks: {
+                num: {
+                    mask: Number,
+                    thousandsSeparator: '.',
+                    radix: ',',
+                    scale: 2,
+                    padFractionalZeros: true,
+                    normalizeZeros: true,
+                    mapToRadix: ['.']
+                }
+            }
+        });
+    });
+
+    // Inicializar máscara para campos de mês/ano
+    const dateInputs = document.querySelectorAll('input[name="reference_date"]');
+    dateInputs.forEach(input => {
+        IMask(input, {
+            mask: '00/0000',
+            lazy: false
+        });
+    });
+
+    // Formulário de adicionar dados
+    const addForm = document.getElementById('addFinancialDataForm');
+    if (addForm) {
+        addForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(addForm);
+            const data = {};
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+            
+            try {
+                const response = await fetch('/api/financial-data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Sucesso!',
+                        text: result.message,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    addForm.reset();
+                } else {
+                    throw new Error(result.message);
+                }
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro!',
+                    text: error.message
+                });
+            }
+        });
+    }
+
+    // Funções para a seção de Editar Dados
+    // Carregar lista de meses disponíveis
+    async function loadAvailableMonths() {
+        if (!monthsList) return;
+        
+        try {
+            const response = await fetch('/api/financial-data/months');
+            const months = await response.json();
+            
+            monthsList.innerHTML = months.map(month => `
+                <button type="button" class="list-group-item list-group-item-action" data-month="${month}">
+                    ${month}
+                </button>
+            `).join('');
+
+            // Adicionar evento de clique para cada mês
+            monthsList.querySelectorAll('.list-group-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    editDateInput.value = item.dataset.month;
+                    loadFinancialData(item.dataset.month);
+                });
+            });
+        } catch (error) {
+            console.error('Erro ao carregar meses:', error);
+        }
+    }
+
+    // Carregar dados financeiros de um mês específico
+    async function loadFinancialData(month) {
+        if (!editForm) return;
+        
+        try {
+            console.log(`Buscando dados para o mês: ${month}`);
+            
+            const response = await fetch('/api/financial-data');
+            console.log('Resposta do servidor:', response.status);
+            
+            if (!response.ok) {
+                throw new Error('Erro ao carregar dados');
+            }
+            
+            const allData = await response.json();
+            console.log('Todos os dados:', allData);
+            
+            // Encontrar os dados do mês selecionado
+            const data = allData.find(item => item.reference_date === month);
+            console.log('Dados do mês:', data);
+            
+            if (!data) {
+                throw new Error('Dados não encontrados para o mês selecionado');
+            }
+            
+            // Preencher o formulário com os dados
+            Object.keys(data).forEach(key => {
+                const input = editForm.querySelector(`[name="${key}"]`);
+                if (input) {
+                    input.value = data[key];
+                }
+            });
+            
+            // Habilitar botões e campos após carregar os dados
+            if (deleteDataBtn) deleteDataBtn.disabled = false;
+            if (saveDataBtn) saveDataBtn.disabled = false;
+            
+            // Habilitar todos os campos do formulário exceto a data
+            editForm.querySelectorAll('input').forEach(input => {
+                if (input.name !== 'reference_date') {
+                    input.readOnly = false;
+                }
+            });
+            
+            console.log('Formulário preenchido com sucesso');
+            
+        } catch (error) {
+            console.error('Erro ao carregar dados:', error);
+            
+            // Limpar e desabilitar formulário em caso de erro
+            editForm.reset();
+            if (deleteDataBtn) deleteDataBtn.disabled = true;
+            if (saveDataBtn) saveDataBtn.disabled = true;
+            
+            // Desabilitar campos do formulário
+            editForm.querySelectorAll('input').forEach(input => {
+                input.readOnly = true;
+            });
+            
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro ao Carregar',
+                text: error.message
+            });
+        }
+    }
+    
+    // Evento de submissão do formulário de edição
+    if (editForm) {
+        editForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(editForm);
+            const data = {};
+            
+            formData.forEach((value, key) => {
+                // Remove formatação de moeda antes de enviar
+                if (key !== 'reference_date') {
+                    value = value.replace('R$ ', '').replace(/\./g, '').replace(',', '.');
+                }
+                data[key] = value;
+            });
+            
+            try {
+                console.log('Enviando dados:', data);
+                
+                const response = await fetch('/api/financial-data', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                console.log('Resposta:', response.status);
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(result.message || 'Erro ao salvar dados');
+                }
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Sucesso!',
+                    text: 'Dados salvos com sucesso!',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+                
+                // Recarregar dados
+                await loadAvailableMonths();
+                await loadFinancialData(data.reference_date);
+                
+            } catch (error) {
+                console.error('Erro ao salvar:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro!',
+                    text: error.message
+                });
+            }
+        });
+    }
+
+    // Evento de busca
+    if (searchDataBtn) {
+        searchDataBtn.addEventListener('click', () => {
+            const month = editDateInput.value;
+            if (month.match(/^(0[1-9]|1[0-2])\/20[0-9]{2}$/)) {
+                loadFinancialData(month);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro!',
+                    text: 'Formato de mês inválido. Use MM/AAAA'
+                });
+            }
+        });
+    }
+
+    // Evento de exclusão
+    if (deleteDataBtn) {
+        deleteDataBtn.addEventListener('click', async function() {
+            const month = editDateInput.value;
+            
+            const result = await Swal.fire({
+                title: 'Confirmar Exclusão',
+                text: `Deseja realmente excluir os dados de ${month}?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sim, excluir',
+                cancelButtonText: 'Cancelar'
+            });
+
+            if (result.isConfirmed) {
+                try {
+                    // Codificar a data para a URL
+                    const encodedMonth = encodeURIComponent(month);
+                    const response = await fetch(`/api/financial-data/${encodedMonth}`, {
+                        method: 'DELETE'
+                    });
+                    
+                    const result = await response.json();
+                    
+                    if (response.ok) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Sucesso!',
+                            text: result.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        editForm.reset();
+                        loadAvailableMonths();
+                    } else {
+                        throw new Error(result.message);
+                    }
+                } catch (error) {
+                    console.error('Erro ao excluir dados:', error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Erro!',
+                        text: error.message || 'Erro ao excluir dados'
+                    });
+                }
+            }
+        });
+    }
+
+    // Carregar meses disponíveis ao abrir a página
+    loadAvailableMonths();
+
+    // Funções para atualizar os gráficos
+    async function updateCharts() {
+        try {
+            const response = await fetch('/api/financial-data/months');
+            const months = await response.json();
+            
+            // Carregar dados de cada mês
+            const monthlyData = await Promise.all(
+                months.map(async month => {
+                    const response = await fetch(`/api/financial-data/${month}`);
+                    const data = await response.json();
+                    return {
+                        month,
+                        ...data
+                    };
+                })
+            );
+
+            // Atualizar cards de resumo
+            const totalAssets = monthlyData.reduce((sum, data) => {
+                return sum + parseFloat(data.cash_balance.replace('R$', '').replace('.', '').replace(',', '.')) +
+                           parseFloat(data.bank_balance.replace('R$', '').replace('.', '').replace(',', '.')) +
+                           parseFloat(data.accounts_receivable.replace('R$', '').replace('.', '').replace(',', '.')) +
+                           parseFloat(data.inventory_balance.replace('R$', '').replace('.', '').replace(',', '.')) +
+                           parseFloat(data.other_credits.replace('R$', '').replace('.', '').replace(',', '.')) +
+                           parseFloat(data.fixed_assets.replace('R$', '').replace('.', '').replace(',', '.')) +
+                           parseFloat(data.investments.replace('R$', '').replace('.', '').replace(',', '.'));
+            }, 0);
+
+            const totalLiabilities = monthlyData.reduce((sum, data) => {
+                return sum + parseFloat(data.accounts_payable.replace('R$', '').replace('.', '').replace(',', '.')) +
+                           parseFloat(data.loans_financing.replace('R$', '').replace('.', '').replace(',', '.')) +
+                           parseFloat(data.installments_payable.replace('R$', '').replace('.', '').replace(',', '.'));
+            }, 0);
+
+            const totalSales = monthlyData.reduce((sum, data) => {
+                return sum + parseFloat(data.total_sales.replace('R$', '').replace('.', '').replace(',', '.'));
+            }, 0);
+
+            document.getElementById('totalAssets').innerHTML = `
+                <i class="fas fa-arrow-up me-2"></i>
+                R$ ${totalAssets.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+            `;
+
+            document.getElementById('totalLiabilities').innerHTML = `
+                <i class="fas fa-arrow-down me-2"></i>
+                R$ ${totalLiabilities.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+            `;
+
+            document.getElementById('totalSales').innerHTML = `
+                <i class="fas fa-shopping-cart me-2"></i>
+                R$ ${totalSales.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+            `;
+
+            // Atualizar gráficos
+            const ctx1 = document.getElementById('assetsLiabilitiesChart').getContext('2d');
+            new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: ['Ativos vs Passivos'],
+                    datasets: [
+                        {
+                            label: 'Ativos',
+                            data: [totalAssets],
+                            backgroundColor: 'rgba(40, 167, 69, 0.5)',
+                            borderColor: 'rgb(40, 167, 69)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Passivos',
+                            data: [totalLiabilities],
+                            backgroundColor: 'rgba(220, 53, 69, 0.5)',
+                            borderColor: 'rgb(220, 53, 69)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: value => `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
+                            }
+                        }
+                    }
+                }
+            });
+
+            const ctx2 = document.getElementById('assetsCompositionChart').getContext('2d');
+            new Chart(ctx2, {
+                type: 'doughnut',
+                data: {
+                    labels: [
+                        'Caixa',
+                        'Banco',
+                        'Contas a Receber',
+                        'Estoque',
+                        'Outros Créditos',
+                        'Imobilizado',
+                        'Investimentos'
+                    ],
+                    datasets: [{
+                        data: [
+                            parseFloat(monthlyData[0].cash_balance.replace('R$', '').replace('.', '').replace(',', '.')),
+                            parseFloat(monthlyData[0].bank_balance.replace('R$', '').replace('.', '').replace(',', '.')),
+                            parseFloat(monthlyData[0].accounts_receivable.replace('R$', '').replace('.', '').replace(',', '.')),
+                            parseFloat(monthlyData[0].inventory_balance.replace('R$', '').replace('.', '').replace(',', '.')),
+                            parseFloat(monthlyData[0].other_credits.replace('R$', '').replace('.', '').replace(',', '.')),
+                            parseFloat(monthlyData[0].fixed_assets.replace('R$', '').replace('.', '').replace(',', '.')),
+                            parseFloat(monthlyData[0].investments.replace('R$', '').replace('.', '').replace(',', '.'))
+                        ],
+                        backgroundColor: [
+                            'rgba(40, 167, 69, 0.8)',
+                            'rgba(0, 123, 255, 0.8)',
+                            'rgba(255, 193, 7, 0.8)',
+                            'rgba(23, 162, 184, 0.8)',
+                            'rgba(111, 66, 193, 0.8)',
+                            'rgba(102, 16, 242, 0.8)',
+                            'rgba(0, 255, 0, 0.8)'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        }
+                    }
+                }
+            });
+
+            const ctx3 = document.getElementById('monthlySalesChart').getContext('2d');
+            new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: monthlyData.map(data => data.month),
+                    datasets: [{
+                        label: 'Vendas Mensais',
+                        data: monthlyData.map(data => 
+                            parseFloat(data.total_sales.replace('R$', '').replace('.', '').replace(',', '.'))
+                        ),
+                        borderColor: 'rgb(0, 123, 255)',
+                        tension: 0.1,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: value => `R$ ${value.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`
+                            }
+                        }
+                    }
+                }
+            });
+
+        } catch (error) {
+            console.error('Erro ao atualizar gráficos:', error);
+        }
+    }
+
+    // Atualizar gráficos quando a aba de gráficos for selecionada
+    const graphsTab = document.getElementById('graphs-tab');
+    if (graphsTab) {
+        graphsTab.addEventListener('shown.bs.tab', function() {
+            loadFinancialResults();
+        });
+    }
+});
+
+// Função para carregar e exibir os resultados
+async function loadFinancialResults() {
+    try {
+        const response = await fetch('/api/financial-data');
+        if (!response.ok) {
+            throw new Error('Erro ao carregar dados');
+        }
+        
+        const data = await response.json();
+        if (!Array.isArray(data)) {
+            throw new Error('Formato de dados inválido');
+        }
+        
+        // Ordenar dados por data (mais recente primeiro)
+        data.sort((a, b) => {
+            const [monthA, yearA] = a.reference_date.split('/');
+            const [monthB, yearB] = b.reference_date.split('/');
+            return new Date(yearB, monthB - 1) - new Date(yearA, monthA - 1);
+        });
+        
+        // Primeiro passamos por todos os dados para calcular os patrimônios líquidos
+        const equityData = data.map(item => {
+            const convertToNumber = (value) => {
+                return parseFloat(value.replace('R$ ', '').replace('.', '').replace(',', '.'));
+            };
+            
+            const equity = (
+                convertToNumber(item.cash_balance) +
+                convertToNumber(item.bank_balance) +
+                convertToNumber(item.accounts_receivable) +
+                convertToNumber(item.inventory_balance) +
+                convertToNumber(item.other_credits) +
+                convertToNumber(item.fixed_assets) +
+                convertToNumber(item.investments) -
+                convertToNumber(item.accounts_payable) -
+                convertToNumber(item.loans_financing) -
+                convertToNumber(item.installments_payable)
+            );
+            
+            const [month, year] = item.reference_date.split('/');
+            return {
+                month: item.reference_date,
+                monthNum: parseInt(month),
+                year: parseInt(year),
+                equity: equity,
+                totalSales: convertToNumber(item.total_sales)
+            };
+        });
+        
+        // Ordenar por data cronologicamente (do mais antigo para o mais novo) para calcular variações
+        equityData.sort((a, b) => {
+            if (a.year !== b.year) return a.year - b.year;
+            return a.monthNum - b.monthNum;
+        });
+        
+        // Calcular variações
+        const variationData = equityData.map((currentMonth, index) => {
+            const previousMonth = index > 0 ? equityData[index - 1] : null;
+            const variation = previousMonth ? currentMonth.equity - previousMonth.equity : null;
+            
+            // Calcular resultado sobre faturamento usando a variação
+            let revenueResult = null;
+            if (variation !== null && currentMonth.totalSales > 0) {
+                revenueResult = (variation / currentMonth.totalSales) * 100;
+            }
+            
+            return {
+                month: currentMonth.month,
+                equity: currentMonth.equity,
+                variation: variation,
+                revenueResult: revenueResult
+            };
+        });
+        
+        // Ordenar de volta do mais recente para o mais antigo para exibição
+        const results = variationData.reverse();
+        
+        // Preencher a tabela
+        const tbody = document.querySelector('#resultsTable tbody');
+        tbody.innerHTML = '';
+        
+        results.forEach(item => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${item.month}</td>
+                <td>${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.equity)}</td>
+                <td>${item.variation === null ? 'N/A' : new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.variation)}</td>
+                <td>${item.revenueResult === null ? 'N/A' : item.revenueResult.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%'}</td>
+            `;
+            tbody.appendChild(row);
+        });
+        
+        // Criar o gráfico
+        const ctx = document.getElementById('resultsChart').getContext('2d');
+        
+        // Destruir o gráfico anterior se existir
+        if (window.resultsChart) {
+            window.resultsChart.destroy();
+        }
+        
+        // Criar novo gráfico (usando a ordem cronológica)
+        const chartData = [...results].reverse();
+        
+        // Criar novo gráfico
+        window.resultsChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: chartData.map(item => item.month),
+                datasets: [{
+                    label: 'Patrimônio Líquido',
+                    data: chartData.map(item => item.equity),
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Evolução do Patrimônio Líquido'
+                    },
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return new Intl.NumberFormat('pt-BR', {
+                                    style: 'currency',
+                                    currency: 'BRL'
+                                }).format(context.raw);
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return new Intl.NumberFormat('pt-BR', {
+                                    style: 'currency',
+                                    currency: 'BRL'
+                                }).format(value);
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+    } catch (error) {
+        console.error('Erro ao carregar resultados:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro',
+            text: error.message
+        });
+    }
+}
+    
+// Recarregar resultados quando dados forem salvos
+document.addEventListener('DOMContentLoaded', function() {
+    const editForm = document.getElementById('editFinancialDataForm');
+    if (editForm) {
+        const originalSubmit = editForm.onsubmit;
+        editForm.onsubmit = async function(e) {
+            if (originalSubmit) {
+                await originalSubmit.call(this, e);
+            }
+            await loadFinancialResults();
+        };
+    }
+});
+</script>
+
+<!-- Chart.js para o gráfico -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    let resultsChart = null; // Variável global para o gráfico
+    
+    // Função para carregar e exibir os resultados
+    async function loadFinancialResults() {
+        try {
+            const response = await fetch('/api/financial-data');
+            if (!response.ok) {
+                throw new Error('Erro ao carregar dados');
+            }
+            
+            const data = await response.json();
+            if (!Array.isArray(data)) {
+                throw new Error('Formato de dados inválido');
+            }
+            
+            // Ordenar dados por data (mais recente primeiro)
+            data.sort((a, b) => {
+                const [monthA, yearA] = a.reference_date.split('/');
+                const [monthB, yearB] = b.reference_date.split('/');
+                return new Date(yearB, monthB - 1) - new Date(yearA, monthA - 1);
+            });
+            
+            // Primeiro passamos por todos os dados para calcular os patrimônios líquidos
+            const equityData = data.map(item => {
+                const convertToNumber = (value) => {
+                    return parseFloat(value.replace('R$ ', '').replace('.', '').replace(',', '.'));
+                };
+                
+                const equity = (
+                    convertToNumber(item.cash_balance) +
+                    convertToNumber(item.bank_balance) +
+                    convertToNumber(item.accounts_receivable) +
+                    convertToNumber(item.inventory_balance) +
+                    convertToNumber(item.other_credits) +
+                    convertToNumber(item.fixed_assets) +
+                    convertToNumber(item.investments) -
+                    convertToNumber(item.accounts_payable) -
+                    convertToNumber(item.loans_financing) -
+                    convertToNumber(item.installments_payable)
+                );
+                
+                const [month, year] = item.reference_date.split('/');
+                return {
+                    month: item.reference_date,
+                    monthNum: parseInt(month),
+                    year: parseInt(year),
+                    equity: equity,
+                    totalSales: convertToNumber(item.total_sales)
+                };
+            });
+            
+            // Ordenar por data cronologicamente (do mais antigo para o mais novo) para calcular variações
+            equityData.sort((a, b) => {
+                if (a.year !== b.year) return a.year - b.year;
+                return a.monthNum - b.monthNum;
+            });
+            
+            // Calcular variações
+            const variationData = equityData.map((currentMonth, index) => {
+                const previousMonth = index > 0 ? equityData[index - 1] : null;
+                const variation = previousMonth ? currentMonth.equity - previousMonth.equity : null;
+                
+                // Calcular resultado sobre faturamento usando a variação
+                let revenueResult = null;
+                if (variation !== null && currentMonth.totalSales > 0) {
+                    revenueResult = (variation / currentMonth.totalSales) * 100;
+                }
+                
+                return {
+                    month: currentMonth.month,
+                    equity: currentMonth.equity,
+                    variation: variation,
+                    revenueResult: revenueResult
+                };
+            });
+            
+            // Ordenar de volta do mais recente para o mais antigo para exibição
+            const results = variationData.reverse();
+            
+            // Preencher a tabela
+            const tbody = document.querySelector('#resultsTable tbody');
+            tbody.innerHTML = '';
+            
+            results.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.month}</td>
+                    <td>${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.equity)}</td>
+                    <td>${item.variation === null ? 'N/A' : new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(item.variation)}</td>
+                    <td>${item.revenueResult === null ? 'N/A' : item.revenueResult.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            // Criar o gráfico
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            
+            // Destruir o gráfico anterior se existir
+            if (resultsChart) {
+                resultsChart.destroy();
+            }
+            
+            // Criar novo gráfico (usando a ordem cronológica)
+            const chartData = [...results].reverse();
+            
+            // Criar novo gráfico
+            resultsChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: chartData.map(item => item.month),
+                    datasets: [{
+                        label: 'Patrimônio Líquido',
+                        data: chartData.map(item => item.equity),
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1,
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Evolução do Patrimônio Líquido'
+                        },
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return new Intl.NumberFormat('pt-BR', {
+                                        style: 'currency',
+                                        currency: 'BRL'
+                                    }).format(context.raw);
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return new Intl.NumberFormat('pt-BR', {
+                                        style: 'currency',
+                                        currency: 'BRL'
+                                    }).format(value);
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+        } catch (error) {
+            console.error('Erro ao carregar resultados:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Erro',
+                text: error.message
+            });
+        }
+    }
+    
+    // Recarregar resultados quando dados forem salvos
+    document.addEventListener('DOMContentLoaded', function() {
+        const editForm = document.getElementById('editFinancialDataForm');
+        if (editForm) {
+            const originalSubmit = editForm.onsubmit;
+            editForm.onsubmit = async function(e) {
+                if (originalSubmit) {
+                    await originalSubmit.call(this, e);
+                }
+                await loadFinancialResults();
+            };
+        }
+    });
+</script>
+
+{% endblock %}

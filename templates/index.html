@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <div class="row align-items-center min-vh-100">
+            <div class="col-lg-6 order-lg-2">
+                <div class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?q=80&w=2070" alt="Dashboard Financeiro" class="img-fluid rounded-3 shadow-lg">
+                </div>
+            </div>
+            <div class="col-lg-6 order-lg-1">
+                <div class="hero-content">
+                    <h1 class="display-4 fw-bold mb-4 text-gradient">
+                        Gestão Financeira Inteligente para sua Empresa
+                    </h1>
+                    <p class="lead mb-4 text-muted">
+                        Com nossa plataforma, você tem acesso a ferramentas avançadas de análise financeira, dashboards personalizados e relatórios detalhados para tomar as melhores decisões para seu negócio.
+                    </p>
+                    {% if not current_user.is_authenticated %}
+                    <div class="d-flex gap-3">
+                        <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg px-5 py-3">
+                            Começar Agora
+                        </a>
+                        <a href="{{ url_for('register') }}" class="btn btn-outline-primary btn-lg px-5 py-3">
+                            Criar Conta
+                        </a>
+                    </div>
+                    {% else %}
+                    <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg px-5 py-3">
+                        Acessar Dashboard
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="features-section py-6 bg-light">
+    <div class="container">
+        <div class="row text-center mb-5">
+            <div class="col-lg-8 mx-auto">
+                <h2 class="fw-bold mb-3">Recursos Poderosos</h2>
+                <p class="lead text-muted">
+                    Tudo que você precisa para gerenciar suas finanças em um só lugar
+                </p>
+            </div>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4 text-center">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-chart-line fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="card-title mb-3">Análise em Tempo Real</h4>
+                        <p class="card-text text-muted">
+                            Acompanhe seus indicadores financeiros com gráficos e relatórios atualizados em tempo real.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4 text-center">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-lock fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="card-title mb-3">Segurança Garantida</h4>
+                        <p class="card-text text-muted">
+                            Seus dados financeiros protegidos com as mais avançadas tecnologias de segurança.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body p-4 text-center">
+                        <div class="feature-icon mb-3">
+                            <i class="fas fa-mobile-alt fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="card-title mb-3">Acesso Multiplataforma</h4>
+                        <p class="card-text text-muted">
+                            Gerencie suas finanças de qualquer lugar, em qualquer dispositivo.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.hero-section {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.hero-content {
+    padding: 2rem 0;
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero-image img {
+    transition: transform 0.3s ease;
+}
+
+.hero-image img:hover {
+    transform: translateY(-10px);
+}
+
+.py-6 {
+    padding-top: 5rem;
+    padding-bottom: 5rem;
+}
+
+.feature-icon {
+    height: 80px;
+    width: 80px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(52, 152, 219, 0.1);
+    border-radius: 50%;
+    margin-bottom: 1rem;
+}
+
+.card {
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    border: none;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.btn-primary:hover::before {
+    opacity: 1;
+}
+
+@media (max-width: 991.98px) {
+    .hero-content {
+        text-align: center;
+        padding: 3rem 0;
+    }
+    
+    .hero-image {
+        margin-top: 2rem;
+    }
+    
+    .d-flex.gap-3 {
+        justify-content: center;
+    }
+}
+</style>
+{% endblock %}
